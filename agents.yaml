@@ -1,0 +1,417 @@
+- id: compliance_checker
+  name: Regulatory Compliance Analyzer
+  description: Identifies compliance gaps against ISO 13485, 21 CFR 820, EU MDR
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Analyze for regulatory compliance gaps.
+    Context: {summary}
+    Data: {extracted_json}
+    Documents: {document_titles}
+    
+    Identify violations, missing requirements, and non-conformances.
+    Rate severity: Critical/High/Medium/Low
+    Provide standard references and remediation steps.
+
+- id: risk_assessor
+  name: Risk Assessment Specialist
+  description: Performs ISO 14971 risk analysis with likelihood and impact scoring
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Conduct comprehensive risk assessment.
+    Context: {summary}
+    Data: {extracted_json}
+    
+    Identify risks with:
+    - Risk description
+    - Likelihood (1-5)
+    - Impact (1-5)
+    - Risk level (likelihood × impact)
+    - Mitigation strategies
+    - Residual risk level
+
+- id: gap_analyst
+  name: GAP Analysis Expert
+  description: Compares current state vs regulatory and industry best practices
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Perform GAP analysis against best practices and standards.
+    Context: {summary}
+    Data: {extracted_json}
+    
+    For each gap, provide:
+    - Current state
+    - Required state
+    - Gap description
+    - Business impact
+    - Priority (Critical/High/Medium/Low)
+    - Recommended actions
+
+- id: data_quality_validator
+  name: Data Quality Validator
+  description: Validates structured data completeness, consistency, and accuracy
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Validate data quality and integrity.
+    Data: {extracted_json}
+    
+    Check for:
+    - Missing required fields
+    - Data format inconsistencies
+    - Logical contradictions
+    - Anomalies or outliers
+    - Completeness score (0-100)
+    
+    Provide specific field-level issues and correction recommendations.
+
+- id: action_planner
+  name: Strategic Action Planner
+  description: Creates 30-60-90 day remediation roadmap
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Create actionable remediation plan.
+    Context: {summary}
+    Data: {extracted_json}
+    Findings: {agent_findings}
+    
+    Provide:
+    - 30-day quick wins (immediate actions)
+    - 60-day improvements (process enhancements)
+    - 90-day strategic initiatives (systemic changes)
+    - Success metrics
+    - Resource requirements
+    - Dependencies
+
+- id: document_classifier
+  name: Document Type Classifier
+  description: Classifies documents by type, purpose, and regulatory category
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Classify and categorize documents.
+    Documents: {document_titles}
+    Summary: {summary}
+    
+    For each document, identify:
+    - Document type (SOP, policy, manual, form, record, etc.)
+    - Regulatory category (quality, design, production, etc.)
+    - Purpose and scope
+    - Required vs optional
+    - Revision status indicators
+
+- id: keyword_extractor
+  name: Keyword & Entity Extractor
+  description: Extracts key terms, technical concepts, and named entities
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Extract important keywords and entities.
+    Content: {summary}
+    
+    Identify:
+    - Technical terms (with definitions)
+    - Regulatory standards mentioned
+    - Product names and identifiers
+    - Personnel roles mentioned
+    - Dates and deadlines
+    - Measurements and specifications
+    - Acronyms (with expansions)
+
+- id: sentiment_analyzer
+  name: Tone & Sentiment Analyzer
+  description: Analyzes document tone, confidence level, and language patterns
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Analyze tone and sentiment.
+    Content: {summary}
+    
+    Assess:
+    - Overall tone (formal/informal, prescriptive/descriptive)
+    - Confidence level in statements
+    - Presence of hedging language
+    - Certainty vs uncertainty markers
+    - Compliance language strength
+    - Areas of ambiguity
+
+- id: version_control_analyst
+  name: Version Control Analyst
+  description: Analyzes revision history, change tracking, and version consistency
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Analyze version control and revision history.
+    Data: {extracted_json}
+    Documents: {document_titles}
+    
+    Check:
+    - Revision numbers and dates
+    - Change history completeness
+    - Version consistency across references
+    - Outdated document indicators
+    - Missing effective dates
+    - Approval signatures status
+
+- id: cross_reference_validator
+  name: Cross-Reference Validator
+  description: Validates internal document references and dependencies
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Validate cross-references between documents.
+    Documents: {document_titles}
+    Summary: {summary}
+    
+    Check:
+    - Referenced documents mentioned
+    - Broken or missing references
+    - Circular dependencies
+    - Reference format consistency
+    - Obsolete references
+    - Missing required references
+
+- id: responsibility_mapper
+  name: Responsibility & Ownership Mapper
+  description: Maps roles, responsibilities, and accountability
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Map responsibilities and ownership.
+    Content: {summary}
+    Data: {extracted_json}
+    
+    Identify:
+    - Roles mentioned
+    - Assigned responsibilities
+    - Approval authorities
+    - Accountability gaps
+    - RACI matrix elements (Responsible, Accountable, Consulted, Informed)
+    - Unclear ownership areas
+
+- id: timeline_analyzer
+  name: Timeline & Deadline Analyzer
+  description: Extracts and analyzes dates, deadlines, and time-sensitive requirements
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Analyze timelines and deadlines.
+    Content: {summary}
+    Data: {extracted_json}
+    
+    Extract:
+    - All dates mentioned
+    - Deadline requirements
+    - Time-bound activities
+    - Overdue indicators
+    - Upcoming critical dates
+    - Timeline conflicts or overlaps
+    - Periodic review requirements
+
+- id: training_requirements_analyst
+  name: Training Requirements Analyst
+  description: Identifies training needs and competency requirements
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Identify training requirements and competencies.
+    Content: {summary}
+    
+    Extract:
+    - Required training programs
+    - Competency requirements by role
+    - Qualification criteria
+    - Retraining intervals
+    - Training gaps
+    - Documentation requirements
+
+- id: terminology_consistency_checker
+  name: Terminology Consistency Checker
+  description: Checks for consistent use of technical terms and definitions
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Check terminology consistency.
+    Content: {summary}
+    Documents: {document_titles}
+    
+    Analyze:
+    - Inconsistent term usage
+    - Multiple terms for same concept
+    - Undefined acronyms
+    - Contradictory definitions
+    - Industry standard vs custom terminology
+    - Recommendations for standardization
+
+- id: process_flow_analyzer
+  name: Process Flow Analyzer
+  description: Maps process steps, workflows, and decision points
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Analyze process flows and workflows.
+    Content: {summary}
+    
+    Identify:
+    - Process steps (sequential order)
+    - Decision points
+    - Inputs and outputs
+    - Process owners
+    - Handoffs between departments
+    - Bottlenecks or inefficiencies
+    - Missing process steps
+
+- id: record_retention_analyst
+  name: Record Retention Analyst
+  description: Analyzes record keeping and retention requirements
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Analyze record retention requirements.
+    Content: {summary}
+    Data: {extracted_json}
+    
+    Identify:
+    - Record types required
+    - Retention periods
+    - Storage requirements
+    - Retrieval requirements
+    - Disposition methods
+    - Regulatory retention mandates
+    - Missing retention specifications
+
+- id: change_control_evaluator
+  name: Change Control Evaluator
+  description: Evaluates change management processes and controls
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Evaluate change control processes.
+    Content: {summary}
+    
+    Assess:
+    - Change request procedures
+    - Impact assessment requirements
+    - Approval workflows
+    - Implementation controls
+    - Validation after changes
+    - Documentation requirements
+    - Change control gaps
+
+- id: supplier_quality_analyst
+  name: Supplier Quality Analyst
+  description: Analyzes supplier management and quality requirements
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Analyze supplier quality management.
+    Content: {summary}
+    Data: {extracted_json}
+    
+    Review:
+    - Supplier approval criteria
+    - Quality agreements
+    - Monitoring requirements
+    - Performance metrics
+    - Re-evaluation frequency
+    - Corrective action processes
+    - Supply chain risks
+
+- id: complaint_handling_reviewer
+  name: Complaint Handling Reviewer
+  description: Reviews customer complaint and adverse event procedures
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Review complaint handling procedures.
+    Content: {summary}
+    
+    Check:
+    - Complaint receipt procedures
+    - Investigation requirements
+    - Response timelines
+    - Trend analysis requirements
+    - Escalation criteria
+    - Regulatory reporting obligations
+    - Customer communication protocols
+
+- id: capa_effectiveness_analyst
+  name: CAPA Effectiveness Analyst
+  description: Analyzes corrective and preventive action effectiveness
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Analyze CAPA system effectiveness.
+    Content: {summary}
+    
+    Evaluate:
+    - Root cause analysis methods
+    - Corrective action adequacy
+    - Preventive action planning
+    - Effectiveness verification
+    - Closure criteria
+    - Recurrence prevention
+    - CAPA process maturity
+
+- id: audit_readiness_assessor
+  name: Audit Readiness Assessor
+  description: Assesses audit preparedness and identifies potential findings
+  enabled: true
+  provider: gemini
+  model: gemini-1.5-flash
+  prompt: |
+    Assess audit readiness.
+    Content: {summary}
+    Data: {extracted_json}
+    Findings: {agent_findings}
+    
+    Predict:
+    - Likely audit findings
+    - Documentation gaps
+    - Interview preparation needs
+    - High-risk audit areas
+    - Evidence availability
+    - Audit trail completeness
+    - Readiness score (0-100)
+
+- id: metric_performance_analyzer
+  name: Metrics & KPI Analyzer
+  description: Analyzes quality metrics and performance indicators
+  enabled: true
+  provider: openai
+  model: gpt-4o-mini
+  prompt: |
+    Analyze quality metrics and KPIs.
+    Content: {summary}
+    Data: {extracted_json}
+    
+    Identify:
+    - KPIs mentioned
+    - Target values
+    - Measurement methods
+    - Reporting frequency
+    - Accountability for metrics
+    - Missing critical metrics
